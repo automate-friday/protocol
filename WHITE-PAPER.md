@@ -1,10 +1,10 @@
 # Automate Friday — A Fact-Log Protocol for Agent Coordination
 
 **Author:** Jacob Haugen
-**Version:** 0.1 (draft, for discussion)
+**Version:** 0.2 (draft, for discussion)
 **Date:** 2026-04-19
 **Status:** Pre-release. Prototypes exist; production implementation does not.
-**Repo:** github.com/automate-friday/automate
+**Repo:** github.com/automate-friday/protocol
 
 ---
 
@@ -15,6 +15,28 @@ This paper describes a minimal protocol for letting humans, AI agents, and deter
 The protocol is built on a single primitive: a signed, append-only **fact log** with domain-aware projection. Every coordination action — a skill being registered, an agent offering capability, a unit of work being dispatched, an approval being granted, a job being claimed or confirmed — is a signed fact appended to the log. Every party computes system state by projecting the log through a deterministic reducer. The log is the coordination fabric; the reducer is the semantics.
 
 The mental model is **Git for agent coordination**. Where Git lets distributed parties collaborate on source code, this protocol lets distributed parties collaborate on behavior in the world.
+
+---
+
+## Why this matters
+
+Three things are true about where automation is today:
+
+1. **AI agents can do the work. You just can't trust them to always do it right.** Claude and peers are capable enough to handle real business tasks end-to-end — scheduling, triage, drafting, research, routine operations. They are not reliable enough to be handed the keys. Every serious AI deployment today is a trust negotiation in disguise.
+
+2. **Real automation is a gradient. Today, the gradient is a cliff.** Automation maturity is a ladder: human → human-with-AI-assist → AI-with-approval → AI-unattended → deterministic script. Each rung should be the same work, done by a different party, with the same interface. Instead, every tool assumes a single rung. Moving up the ladder means rebuilding the integration from scratch. The gradient is impossible to express, so nobody expresses it.
+
+3. **Any real workflow involves multiple parties, often across organizations, always across time.** Your agent on your laptop and your client's agent on their VPS should be able to collaborate on a shared outcome without one hosting the other's code. The party mix will also change over time: the human approving today is the AI approving next quarter is the script running unattended next year. No tool treats this as first-class.
+
+These three problems have one root: **the absence of a shared coordination substrate for work getting done.** Every existing tool — Zapier, Temporal, CrewAI, Kubernetes, bespoke internal pipelines — assumes one runtime, one moment, one authority. That assumption IS the problem.
+
+**The solution reduces to one observation.** Git solved distributed collaboration on *code* by inventing a primitive: the signed append-only log with content addressing. The same primitive, applied to coordinating *behavior in the world*, dissolves every layer of the problem above:
+
+- **Trust gap** → approvals are signed facts; audit is the log itself; every action has provenance.
+- **Ladder problem** → reputation is a projection over confirmation facts; trust graduation is a reducer rule that relaxes approval requirements once track record accumulates. Same skill, same interface; fulfiller changes silently over time.
+- **Coordination gap** → cross-party collaboration is subscribing to a shared log topic. No integration project. Agents from different organizations coordinate by appending facts with their own signatures.
+
+**The product's name earns itself.** *Automate Friday* means your system takes over enough of the week that you can take Friday off. Progressive automation — the namesake — IS the product. The Git-style protocol is *how* you get there.
 
 ---
 
@@ -190,7 +212,19 @@ This protocol is intended to be open source. The primitive itself — signed app
 
 We believe the right way to ship this is as an open protocol, with paid services and tools layered above — following the same pattern as Git itself, HTTP, Kafka, or React. The substrate belongs to everyone; value accrues to the builders who construct useful things on top.
 
-Specific artifacts we intend to publish openly:
+### Licensing plan
+
+Three layers, three licenses, each chosen to maximize the right kind of freedom:
+
+| Layer | License | Why |
+|---|---|---|
+| **Protocol specification + fact schemas** | MIT or CC0 | Standards need to be maximally permissive. HTTP, RSS, ActivityPub, Git's own protocol all follow this. |
+| **Agent skills + reducer rule libraries + reference middleware** | MIT or CC-BY | Shareable artifacts benefit from reusability. Agents and skills should flow between orgs with minimal friction. |
+| **Production framework + hosted platform** | FSL or BSL, converting to Apache 2.0 after 2–4 years | Protects commercial surfaces from hyperscaler capture while keeping personal, internal, and non-competing commercial use free. Following the Terraform / HashiCorp / Sentry precedent. |
+
+The reference prototypes in this repository are MIT. The production framework, when it exists, will be released under FSL (Functional Source License) or BSL (Business Source License) with an automatic conversion to Apache 2.0 at a defined change date.
+
+### Specific artifacts we intend to publish openly
 
 - The protocol specification (this paper, expanded over time)
 - Reference node implementation in TypeScript
@@ -198,7 +232,7 @@ Specific artifacts we intend to publish openly:
 - Reference reducer rules for common policies (RBAC, rate limiting, reputation)
 - Integration guides for common log transports (Git, Convex, Postgres, Redis Streams, S3)
 
-Commercial surfaces we will build on top (not part of the open protocol):
+### Commercial surfaces we will build on top
 
 - Hosted log-as-a-service with reliability guarantees
 - The trust layer for governed AI tool access
