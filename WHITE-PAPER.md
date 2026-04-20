@@ -252,7 +252,7 @@ These are the questions we are actively working through and welcome collaboratio
 - **Economic primitives for marketplaces.** How to express pricing, slashing, collateral, dispute resolution in a small, well-typed fact vocabulary.
 - **Failure modes and recovery.** What happens when an agent claims a dispatch and then disappears? Time-bounded claims? Forfeit facts? Re-claiming after timeout?
 
-We are building this in public. The reference implementations, white paper revisions, and ongoing design discussion live at github.com/automate-friday/automate. Issues, pull requests, and adversarial critique are welcome.
+We are building this in public. The reference implementations, white paper revisions, and ongoing design discussion live at github.com/automate-friday/protocol. Issues, pull requests, and adversarial critique are welcome.
 
 ---
 
@@ -274,4 +274,4 @@ Seven facts. Four participants (three online at dispatch time, one bootstrap). O
 
 ---
 
-*This paper is version 0.1. Feedback shapes v0.2. Author contact: github.com/automate-friday/automate.*
+*This paper is version 0.1. Feedback shapes v0.2. Author contact: github.com/automate-friday/protocol.*
