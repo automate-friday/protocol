@@ -7,6 +7,13 @@
 **Author:** Jacob Haugen
 **First published:** 2026-04-19
 
+## Companion repositories
+
+- **[automate-friday/protocol](https://github.com/automate-friday/protocol)** (this repo, MIT) — protocol specification, fact schemas, white paper, minimal reference prototypes.
+- **[automate-friday/automate](https://github.com/automate-friday/automate)** (FSL-1.1) — the framework: DSL, runtime, CLI, and reference agents. Converts to Apache 2.0 after 2 years.
+
+The protocol is where the standard lives. The framework is where the implementation lives. Both are open; they differ in licensing terms for competing-SaaS clauses.
+
 ---
 
 ## What this is
